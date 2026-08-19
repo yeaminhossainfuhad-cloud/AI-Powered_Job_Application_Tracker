@@ -26,6 +26,50 @@ dashboard, with an AI-powered job description analyzer built on the Anthropic AP
 - **Dashboard** — total applications, applications by status, recent applications,
   upcoming interviews
 
+# Screenshots
+
+## Login Page
+
+![Login](screenshot/Login.png)
+
+---
+
+## Register Page
+
+![Register](screenshot/Sign%20Up.png)
+
+---
+
+## Dashboard
+
+![Dashboard](screenshot/Dashboard.png)
+
+---
+
+## Applications
+
+![Applications](screenshot/Application.png)
+
+---
+
+## Add Application
+
+![Add Application](screenshot/Add%20Application.png)
+
+---
+
+## Application View
+
+![Application View](screenshot/Application%20View.png)
+
+---
+
+## AI Analysis
+
+![AI Analysis](screenshot/AI%20Analysis.png)
+
+---
+
 ## Tech Stack
 
 - Python 3.11+, Django 5
