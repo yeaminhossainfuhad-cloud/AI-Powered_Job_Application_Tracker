@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · JobTrackAI{% endblock %}
+{% block content %}
+<div class="dash-header">
+    <h1>Welcome back, {{ user.first_name|default:user.username }} 👋</h1>
+    <p>Here's an overview of your job search.</p>
+</div>
+
+<div class="stat-grid">
+    <div class="stat-card total">
+        <div class="stat-value">{{ total_applications }}</div>
+        <div class="stat-label">Total Applications</div>
+    </div>
+    {% for stat in status_counts %}
+    <div class="stat-card">
+        <div class="stat-value">{{ stat.count }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="dash-grid">
+    <div class="card">
+        <div class="section-title">Recent Applications</div>
+        {% if recent_applications %}
+            {% for app in recent_applications %}
+            <div class="list-row">
+                <div class="list-row-main">
+                    <a href="{% url 'jobs:application_detail' app.pk %}" class="list-row-title">{{ app.job_title }}</a>
+                    <span class="list-row-sub">{{ app.company_name }} &middot; added {{ app.created_at|date:"M d, Y" }}</span>
+                </div>
+                <span class="badge badge-{{ app.status }}">{{ app.get_status_display }}</span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">No applications yet. <a href="{% url 'jobs:application_create' %}">Add your first one</a>.</div>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="section-title">Upcoming Interviews</div>
+        {% if upcoming_interviews %}
+            {% for iv in upcoming_interviews %}
+            <div class="list-row">
+                <div class="list-row-main">
+                    <a href="{% url 'jobs:application_detail' iv.application.pk %}" class="list-row-title">{{ iv.application.job_title }}</a>
+                    <span class="list-row-sub">{{ iv.application.company_name }} &middot; {{ iv.interview_datetime|date:"M d, Y H:i" }}</span>
+                </div>
+                <span class="badge badge-interview">{{ iv.get_interview_type_display }}</span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">No upcoming interviews scheduled.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

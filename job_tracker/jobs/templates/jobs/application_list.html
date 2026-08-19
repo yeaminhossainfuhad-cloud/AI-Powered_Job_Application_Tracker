@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Applications · JobTrackAI{% endblock %}
+{% block content %}
+<div class="toolbar">
+    <h1>Applications</h1>
+    <a href="{% url 'jobs:application_create' %}" class="btn btn-primary">+ Add Application</a>
+</div>
+
+<form method="get" class="filter-bar">
+    {{ form.q }}
+    {{ form.status }}
+    {{ form.category }}
+    {{ form.location }}
+    <button type="submit" class="btn btn-secondary">Filter</button>
+</form>
+
+{% if applications %}
+<div class="app-grid">
+    {% for app in applications %}
+    <div class="app-card">
+        <div class="app-card-top">
+            <div>
+                <h3><a href="{% url 'jobs:application_detail' app.pk %}">{{ app.job_title }}</a></h3>
+                <p class="company">{{ app.company_name }}</p>
+            </div>
+            <span class="badge badge-{{ app.status }}">{{ app.get_status_display }}</span>
+        </div>
+        <div class="meta">
+            {% if app.location %}<span>📍 {{ app.location }}</span>{% endif %}
+            {% if app.salary %}<span>💰 {{ app.salary }}</span>{% endif %}
+            <span>🗓 {{ app.application_date|date:"M d, Y" }}</span>
+        </div>
+        {% if app.tags.all %}
+        <div class="tags">
+            {% for tag in app.tags.all %}<span class="tag-pill">{{ tag.name }}</span>{% endfor %}
+        </div>
+        {% endif %}
+        <div class="progress-bar"><div class="progress-bar-fill {% if app.status == 'rejected' %}rejected{% endif %}" style="width: {{ app.status_progress_percent }}%;"></div></div>
+        <div class="app-card-actions">
+            <a href="{% url 'jobs:application_detail' app.pk %}" class="btn btn-secondary btn-sm">View</a>
+            <a href="{% url 'jobs:application_edit' app.pk %}" class="btn btn-secondary btn-sm">Edit</a>
+            <a href="{% url 'jobs:application_delete' app.pk %}" class="btn btn-ghost btn-sm">Delete</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if page_obj.has_other_pages %}
+<div class="pagination">
+    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">&laquo; Prev</a>{% endif %}
+    <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Next &raquo;</a>{% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<div class="card empty-state">No applications match your filters. <a href="{% url 'jobs:application_create' %}">Add a new application</a>.</div>
+{% endif %}
+{% endblock %}

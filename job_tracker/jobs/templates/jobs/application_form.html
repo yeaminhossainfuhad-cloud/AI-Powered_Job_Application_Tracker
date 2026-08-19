@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}{% if is_edit %}Edit Application{% else %}New Application{% endif %} · JobTrackAI{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 760px; margin: 0 auto;">
+    <h1>{% if is_edit %}Edit Application{% else %}Add New Application{% endif %}</h1>
+    <p class="auth-sub" style="text-align:left; margin-bottom:20px;">
+        {% if is_edit %}Update the details for {{ application.job_title }}.{% else %}Track a new job opportunity.{% endif %}
+    </p>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group">
+                <label for="{{ form.job_title.id_for_label }}">Job Title *</label>
+                {{ form.job_title }}
+                {% for e in form.job_title.errors %}<ul class="errorlist"><li>{{ e }}</li></ul>{% endfor %}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.company_name.id_for_label }}">Company Name *</label>
+                {{ form.company_name }}
+                {% for e in form.company_name.errors %}<ul class="errorlist"><li>{{ e }}</li></ul>{% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.job_description.id_for_label }}">Job Description</label>
+            {{ form.job_description }}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="{{ form.location.id_for_label }}">Location</label>
+                {{ form.location }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.salary.id_for_label }}">Salary</label>
+                {{ form.salary }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="{{ form.job_url.id_for_label }}">Job URL</label>
+                {{ form.job_url }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.application_date.id_for_label }}">Application Date</label>
+                {{ form.application_date }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="{{ form.status.id_for_label }}">Status</label>
+                {{ form.status }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.category.id_for_label }}">Category</label>
+                {{ form.category }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.tags_input.id_for_label }}">{{ form.tags_input.label }}</label>
+            {{ form.tags_input }}
+            <span class="helptext">{{ form.tags_input.help_text }}</span>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.notes.id_for_label }}">Notes</label>
+            {{ form.notes }}
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top: 10px;">
+            <button type="submit" class="btn btn-primary">{% if is_edit %}Save Changes{% else %}Add Application{% endif %}</button>
+            <a href="{% if is_edit %}{% url 'jobs:application_detail' application.pk %}{% else %}{% url 'jobs:application_list' %}{% endif %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

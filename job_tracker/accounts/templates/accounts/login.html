@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Log In · JobTrackAI{% endblock %}
+{% block content %}
+<div class="auth-wrap card">
+    <h1>Welcome back</h1>
+    <p class="auth-sub">Log in to manage your job applications.</p>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_username">Username</label>
+            <input type="text" name="username" id="id_username" class="form-control" autofocus required>
+        </div>
+        <div class="form-group">
+            <label for="id_password">Password</label>
+            <input type="password" name="password" id="id_password" class="form-control" required>
+        </div>
+        {% if form.errors %}
+        <ul class="errorlist"><li>Your username and password didn't match. Please try again.</li></ul>
+        {% endif %}
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit" class="btn btn-primary btn-block">Log in</button>
+    </form>
+    <p class="auth-footer">Don't have an account? <a href="{% url 'accounts:register' %}">Sign up</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}AI Analysis · {{ application.job_title }}{% endblock %}
+{% block content %}
+<div class="detail-header">
+    <div class="detail-title">
+        <h1>✨ AI Analysis</h1>
+        <p class="company">{{ application.job_title }} at {{ application.company_name }}</p>
+    </div>
+    <div class="detail-actions">
+        <a href="{% url 'jobs:application_detail' application.pk %}" class="btn btn-secondary">← Back to Application</a>
+    </div>
+</div>
+
+<div class="detail-grid">
+    <div>
+        <div class="card ai-panel">
+            <h2>Job Description Analyzer</h2>
+
+            {% if ai_analysis %}
+                <p style="font-size:0.82rem; color: var(--text-muted); margin-top:-10px;">Last generated {{ ai_analysis.generated_at|date:"M d, Y H:i" }}</p>
+
+                <div class="ai-section">
+                    <h4>Summary</h4>
+                    <div class="content">{{ ai_analysis.summary }}</div>
+                </div>
+                <div class="ai-section">
+                    <h4>Required Skills</h4>
+                    <div class="content">{{ ai_analysis.required_skills|linebreaksbr }}</div>
+                </div>
+                <div class="ai-section">
+                    <h4>Required Experience</h4>
+                    <div class="content">{{ ai_analysis.required_experience }}</div>
+                </div>
+                <div class="ai-section">
+                    <h4>Important Technologies</h4>
+                    <div class="content">{{ ai_analysis.important_technologies|linebreaksbr }}</div>
+                </div>
+                <div class="ai-section">
+                    <h4>Interview Preparation Suggestions</h4>
+                    <div class="content">{{ ai_analysis.interview_prep_suggestions|linebreaksbr }}</div>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="generate">
+                    <button type="submit" class="btn btn-secondary btn-sm">🔄 Re-generate Analysis</button>
+                </form>
+            {% else %}
+                <div class="ai-empty">
+                    <p>No AI analysis has been generated for this job yet.</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="generate">
+                        <button type="submit" class="btn btn-primary">✨ Generate AI Analysis</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div>
+        <div class="card">
+            <div class="section-title">AI Job Match Analysis</div>
+            <p style="font-size:0.85rem; color: var(--text-muted); margin-top:-6px;">
+                Paste a short summary of your skills and experience to see how well you match this role.
+            </p>
+            <form method="post" action="{% url 'jobs:ai_match' application.pk %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ match_form.candidate_profile }}
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Run Match Analysis</button>
+            </form>
+
+            {% if match_result %}
+            <hr class="divider">
+            <div style="text-align:center;">
+                <div class="match-score-badge">{{ match_result.match_score }}%</div>
+                <p style="font-size:0.82rem; color: var(--text-muted);">Match Score</p>
+            </div>
+            <div class="ai-section">
+                <h4>Strengths</h4>
+                <ul>{% for s in match_result.strengths %}<li>{{ s }}</li>{% endfor %}</ul>
+            </div>
+            <div class="ai-section">
+                <h4>Gaps</h4>
+                <ul>{% for g in match_result.gaps %}<li>{{ g }}</li>{% endfor %}</ul>
+            </div>
+            <div class="ai-section">
+                <h4>Recommendation</h4>
+                <div class="content">{{ match_result.recommendation }}</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <div class="section-title">Job Description</div>
+            {% if application.job_description %}
+            <div class="jd-box" style="max-height: 220px;">{{ application.job_description }}</div>
+            {% else %}
+            <p class="empty-state">No job description on file. <a href="{% url 'jobs:application_edit' application.pk %}">Add one</a> to enable AI analysis.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
