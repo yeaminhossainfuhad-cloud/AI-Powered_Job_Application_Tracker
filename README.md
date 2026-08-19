@@ -59,7 +59,7 @@ job_tracker/
 ### 1. Clone and create a virtual environment
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/yeaminhossainfuhad-cloud/AI-Powered_Job_Application_Tracker.git
 cd job_tracker
 python -m venv venv
 source venv/bin/activate      # Windows: venv\Scripts\activate
@@ -175,10 +175,11 @@ python manage.py check
 python manage.py test
 ```
 
-## Submission Checklist
+# Author
 
-- [ ] GitHub repository URL with this full project committed
-- [ ] `requirements.txt` (included)
-- [ ] `README.md` with setup instructions (this file)
-- [ ] UI screenshots or a short demo video showing: registration/login,
-      dashboard, application list/detail/create/edit, and the AI Analysis page
+**Md. Yeamin Hossain Fuhad**
+
+- Diploma in Engineering in Computer Science & Technology
+- B.Sc. in Computer Science & Engineering, World University of Bangladesh
+- IT Support, Popular Diagnostic Centre
+- Aspiring Python Django Developer & Software Quality Assurance (SQA) Engineer
